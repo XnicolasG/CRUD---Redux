@@ -4,8 +4,8 @@ import { ListOfUsers } from './components/ListOfUSers'
 export const App = () => {
   return (
     <section>
-        <ListOfUsers />
         <CreateNewUser />
+        <ListOfUsers />
     </section>
   )
 }

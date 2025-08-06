@@ -27,7 +27,6 @@
   "dependencies": {
     "@reduxjs/toolkit": "2.8.2",
     "@tailwindcss/vite": "^4.1.11",
-    "@tremor/react": "^3.18.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-redux": "9.2.0",
