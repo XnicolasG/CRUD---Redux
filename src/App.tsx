@@ -1,3 +1,4 @@
+import { Toaster } from 'sonner'
 import { CreateNewUser } from './components/CreateNewUser'
 import { ListOfUsers } from './components/ListOfUSers'
 
@@ -6,6 +7,7 @@ export const App = () => {
     <section>
         <CreateNewUser />
         <ListOfUsers />
+        <Toaster richColors />
     </section>
   )
 }
