@@ -4,13 +4,23 @@ import { useAppSelector } from '../hooks/store';
 import { useUserActions } from '../hooks/useUserActions';
 import { Edit } from './icons/Edit';
 import { Erase } from './icons/Erase';
+import { useState } from 'react';
+import type { UserWithId } from '../store/users/slice';
 
 
 
 export const ListOfUsers = () => {
+    const [IsModalOpen, setIsModalOpen] = useState(false)
+    const [ selectedUser, setSelectedUser] = useState<UserWithId | null>(null)
+
     const [animationParent] = useAutoAnimate()
     const users = useAppSelector((state) => state.users)
     const { removeUser } = useUserActions()
+
+    const handleUpdate = (user: UserWithId) => {
+        setSelectedUser(user)
+        setIsModalOpen(true)
+    }
 
     return (
         <div className="mx-auto max-w-2xl border-2 bg-slate-100 border-gray-300 my-4 shadow-xl overflow-hidden rounded-xl p-2">
@@ -52,7 +62,7 @@ export const ListOfUsers = () => {
                                 {/* Editar */}
                                 <button 
                                 aria-label="edit"
-                                onClick={() => console.log(user)
+                                onClick={() => handleUpdate(user)
                                 }
                                 >
                                     <Edit />
