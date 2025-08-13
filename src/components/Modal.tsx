@@ -24,8 +24,8 @@ export const Modal = ({ isOpen, onClose, user }: Props) => {
     const email = formData.get('email') as string
     const github = formData.get('github') as string
 
-    setUserToUpdate({ id : user.id, name, email, github })
-    const updatedUser: UserWithId = { id: user.id, name, email, github };
+    setUserToUpdate({ id : user?.id ?? '' , name, email, github })
+    const updatedUser: UserWithId = { id: user?.id ?? '', name, email, github };
 
     console.log(updatedUser);
     
@@ -38,7 +38,7 @@ export const Modal = ({ isOpen, onClose, user }: Props) => {
     <Dialog open={isOpen} onClose={onClose} className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
       <DialogPanel className="bg-white rounded-lg p-6 shadow-xl w-full max-w-md z-10">
-        <DialogTitle className="text-lg font-semibold mb-4">Edit user: {userToUpdate.name}</DialogTitle>
+        <DialogTitle className="text-lg font-semibold mb-4">Edit user: {userToUpdate?.name ?? ''}</DialogTitle>
         <form className="space-y-4" onSubmit={handleSubmit}>
           <label className='text-blue-600 text-sm' htmlFor="name">Name</label>
           <input name="name" className="w-full border px-3 py-2 rounded" />

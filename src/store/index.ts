@@ -1,16 +1,29 @@
-import { configureStore, type Middleware, type PayloadAction, type UnknownAction } from "@reduxjs/toolkit";
+import { configureStore, type Middleware } from "@reduxjs/toolkit";
 import usersReducer, { rollbackUser, type UserWithId } from './users/slice'
 import { toast } from "sonner";
 
+type DeleteAction = {
+    type: 'users/deleteUserById';
+    payload: string;
+}
+
+type AddAction = {
+    type: 'users/addNewUser';
+    payload: UserWithId;
+}
+type UpdateAction = {
+    type: 'users/updateUserById';
+    payload: UserWithId
+}
+type UserActions = DeleteAction | AddAction | UpdateAction
 
 const persistanceMiddleware: Middleware = (store) => (next) => (action) => {
     next(action)
     localStorage.setItem("redux_state", JSON.stringify(store.getState()))
 }
 
-//1:33:00
 const syncDatabaseMiddleware: Middleware = store => next => (action) => {
-    const { type, payload } = action
+    const { type, payload } = action as UserActions;
     console.log({ type, payload });
     const previousState = store.getState()
     next(action)
@@ -25,7 +38,7 @@ const syncDatabaseMiddleware: Middleware = store => next => (action) => {
             })
             .catch((err) => {
                 toast.error('Something went wrong')
-                if (userToRemove) store.dispatch(rollbackUser(userToRemove))
+                if (userToRemove) store.dispatch(rollbackUser(previousState.users.find((user: UserWithId) => user.id === userToRemove)))
                 console.log(err)
             })
     } else if (type === 'users/addNewUser') {
