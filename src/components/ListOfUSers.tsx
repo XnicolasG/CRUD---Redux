@@ -12,17 +12,19 @@ import { Modal } from './Modal';
 
 export const ListOfUsers = () => {
     const [IsModalOpen, setIsModalOpen] = useState(false)
-    const [ selectedUser, setSelectedUser] = useState<UserWithId | null>(null)
+    const [selectedUser, setSelectedUser] = useState<UserWithId | null>(null)
+    const [remove, setRemove] = useState<string | null>(null)
 
     const [animationParent] = useAutoAnimate()
     const users = useAppSelector((state) => state.users)
     const { removeUser } = useUserActions()
 
+
     const handleUpdate = (user: UserWithId) => {
         setSelectedUser(user)
         setIsModalOpen(true)
         console.log(user);
-        
+
     }
 
     return (
@@ -61,36 +63,41 @@ export const ListOfUsers = () => {
 
                             <td className="px-4 py-3 align-middle">{user.email}</td>
 
-                            <td className="px-4 py-3 flex gap-3 justify-center">
-                                {/* Editar */}
-                                <button 
-                                aria-label="edit"
-                                onClick={() => handleUpdate(user)
-                                }
+                            <td className="px-4 py-3 relative overflow-visible h-16">
+                                {/* Botones principales */}
+                                <section
+                                    className={`absolute inset-0 flex gap-3 justify-center items-center transition-all duration-150 ${remove === user.id ? '-translate-y-10 opacity-0 pointer-events-none' : 'translate-y-0 opacity-100'
+                                        }`}
                                 >
-                                    <Edit />
-                                </button>
+                                    <button aria-label="edit" onClick={() => handleUpdate(user)}>
+                                        <Edit />
+                                    </button>
+                                    <button aria-label="remove item" onClick={() => setRemove(user.id)}>
+                                        <Erase />
+                                    </button>
+                                </section>
 
-                                {/* Eliminar */}
-                                <button
-                                    aria-label="remove item"
-                                    onClick={() => removeUser(user.id)}
+                                {/* Botones de confirmación */}
+                                <section
+                                    className={`absolute inset-0 flex gap-3 justify-center items-center transition-all duration-150 ${remove === user.id ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0 pointer-events-none'
+                                        }`}
                                 >
-                                    <Erase />
-                                </button>
-                            {
-                                IsModalOpen && 
-                                <Modal 
-                                isOpen={IsModalOpen} 
-                                onClose={() => setIsModalOpen(false)} 
-                                user={selectedUser}
-                                />
-                            }
+                                    <button onClick={() => removeUser(user.id)}>✅</button>
+                                    <button onClick={() => setRemove(null)}>✖️</button>
+                                </section>
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
+            {
+                IsModalOpen &&
+                <Modal
+                    isOpen={IsModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    user={selectedUser}
+                />
+            }
         </div>
     )
 }

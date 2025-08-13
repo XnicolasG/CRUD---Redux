@@ -26,7 +26,55 @@ const syncDatabaseMiddleware: Middleware = store => next => (action) => {
             .catch((err) => {
                 toast.error('Something went wrong')
                 if (userToRemove) store.dispatch(rollbackUser(userToRemove))
-                    console.log(err)
+                console.log(err)
+            })
+    } else if (type === 'users/addNewUser') {
+        const usertoAdd = payload
+        // let userInfo: UserWithId[] = previousState.users.find((user: UserWithId) => user.id === usertoAdd);
+        fetch('https://jsonplaceholder.typicode.com/posts', {
+            method: 'POST',
+            body: JSON.stringify({
+                title: usertoAdd.name,
+                body: usertoAdd.email,
+                userId: 1,
+            }),
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        })
+            .then((response) => {
+                if (response.ok) {
+                    toast.success(`${payload.name} has been created`)
+                }
+                })
+                .catch((err) => {
+                toast.error('Something went wrong')
+                if (usertoAdd) store.dispatch(rollbackUser(usertoAdd))
+                console.log(err)
+            })
+    }else if (type === 'users/updateUserById') {
+        const usertoAdd = payload
+        // let userInfo: UserWithId[] = previousState.users.find((user: UserWithId) => user.id === usertoAdd).name;
+        fetch(`https://jsonplaceholder.typicode.com/posts/1`, {
+            method: 'PUT',
+            body: JSON.stringify({
+                title: usertoAdd.name,
+                body: usertoAdd.email,
+                userId: 1,
+            }),
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        })
+            .then((response) => {
+                if (response.ok) {
+                    toast.success(`${payload.name} has been updated`)
+                }
+                })
+                .catch((err) => {
+                toast.error('Something went wrong')
+                if (usertoAdd) store.dispatch(rollbackUser(usertoAdd))
+                console.log(err)
             })
     }
 
