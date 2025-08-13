@@ -6,6 +6,7 @@ import { Edit } from './icons/Edit';
 import { Erase } from './icons/Erase';
 import { useState } from 'react';
 import type { UserWithId } from '../store/users/slice';
+import { Modal } from './Modal';
 
 
 
@@ -20,6 +21,8 @@ export const ListOfUsers = () => {
     const handleUpdate = (user: UserWithId) => {
         setSelectedUser(user)
         setIsModalOpen(true)
+        console.log(user);
+        
     }
 
     return (
@@ -32,7 +35,7 @@ export const ListOfUsers = () => {
                 <thead>
                     <tr className=" text-gray-700">
                         <th className="px-4 py-2">ID</th>
-                        <th className="px-4 py-2">Nombre</th>
+                        <th className="px-4 py-2" >Nombre</th>
                         <th className="px-4 py-2">Email</th>
                         <th className="px-4 py-2 text-center">Acciones</th>
                     </tr>
@@ -75,6 +78,14 @@ export const ListOfUsers = () => {
                                 >
                                     <Erase />
                                 </button>
+                            {
+                                IsModalOpen && 
+                                <Modal 
+                                isOpen={IsModalOpen} 
+                                onClose={() => setIsModalOpen(false)} 
+                                user={selectedUser}
+                                />
+                            }
                             </td>
                         </tr>
                     ))}
